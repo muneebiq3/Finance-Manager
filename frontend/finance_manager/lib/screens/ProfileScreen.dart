@@ -144,6 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       height: 45,
       child: TextField(
         controller: controller,
+        cursorColor: Colors.white,
         decoration: InputDecoration(
           labelText: title,
           labelStyle: const TextStyle(color: Colors.white),
@@ -167,6 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
+        cursorColor: Colors.white,
         decoration: InputDecoration(
           labelText: title,
           labelStyle: const TextStyle(color: Colors.white),
@@ -235,117 +237,103 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF266DD1), // Darker shade
-                Color(0xFF90B3E9), // Primary theme color
-                Color(0xFFB3CFF1), // Lighter shade
-              ],
-            ),
-          ),
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              }, 
-              icon: const Icon(
-                Icons.arrow_back
-              ),
-              iconSize: 30,
-              color: Colors.white,
-            ),
-          ),
-        )
-      ),
-
-      body: SafeArea(
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF266DD1), // Darker shade
-                Color(0xFF90B3E9), // Primary theme color
-                Color(0xFFB3CFF1), // Lighter shade
-              ],
-            ),
-          ),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    _title(),
-                    const SizedBox(height: 20),
-                    _entryField('Name', _controllerName, 'Enter Name'),
-                    const SizedBox(height: 20),
-                    _entryField('Contact', _controllerContact, 'Enter your Contact'),
-                    const SizedBox(height: 20),
-                    _passwordField(
-                      'Old Password', 
-                      _controllerCurrentPassword, 
-                      'Please enter old password',
-                      hideOldPassword,
-                      () {
-                        setState(() {
-                          hideOldPassword = !hideOldPassword;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                     _passwordField(
-                      'Current Password', 
-                      _controllerNewPassword, 
-                      'Please enter new password',
-                      hidePassword,
-                      () {
-                        setState(() {
-                          hidePassword = !hidePassword;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                     _passwordField(
-                      'Confirm Password', 
-                      _controllerConfirmNewPassword, 
-                      'Please confirm password',
-                      hideConfirmPassword,
-                      () {
-                        setState(() {
-                          hideConfirmPassword = !hideConfirmPassword;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 4),
-                    _errorMessage(),
-                    const SizedBox(height: 10),
-                    _successMessage(),
-                    const SizedBox(height: 10),
-                    _updateButton(),
-                  ],
-                ),
-              )
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF266DD1), // Darker shade
+              Color(0xFF90B3E9), // Primary theme color
+              Color(0xFFB3CFF1), // Lighter shade
             ],
           ),
-        )
-      ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () => Navigator.pop(context), 
+                            icon: const Icon(Icons.arrow_back),
+                            iconSize: 30,
+                            color: Colors.white,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                _title(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      _entryField('Name', _controllerName, 'Enter Name'),
+                      const SizedBox(height: 20),
+                      _entryField('Contact', _controllerContact, 'Enter your Contact'),
+                      const SizedBox(height: 20),
+                      _passwordField(
+                        'Old Password', 
+                        _controllerCurrentPassword, 
+                        'Please enter old password',
+                        hideOldPassword,
+                        () {
+                          setState(() {
+                            hideOldPassword = !hideOldPassword;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      _passwordField(
+                        'Current Password', 
+                        _controllerNewPassword, 
+                        'Please enter new password',
+                        hidePassword,
+                        () {
+                          setState(() {
+                            hidePassword = !hidePassword;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      _passwordField(
+                        'Confirm Password', 
+                        _controllerConfirmNewPassword, 
+                        'Please confirm password',
+                        hideConfirmPassword,
+                        () {
+                          setState(() {
+                            hideConfirmPassword = !hideConfirmPassword;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 4),
+                      _errorMessage(),
+                      const SizedBox(height: 10),
+                      _successMessage(),
+                      const SizedBox(height: 10),
+                      _updateButton(),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        ),
+      )
     );
   }
 }

@@ -8,7 +8,7 @@ import 'screens/LoginScreen.dart';
 import 'screens/SignupScreen.dart';
 import 'screens/HomeScreen.dart';
 import 'screens/SavedSavingsPlanScreen.dart';
-import 'screens/AddIncomeScreen.dart';
+import 'screens/ProfileScreen.dart';
 import 'screens/AddExpenseScreen.dart';
 
 void main() async{
@@ -37,7 +37,6 @@ class MyApp extends StatelessWidget {
         '/signup_screen': (context) => SignupScreen(),
         '/login_screen': (context) => LoginScreen(),
         '/home_screen': (context) => HomeScreen(),
-        '/add_income': (context) => AddIncomeScreen(),
         '/add_expense': (context) => AddExpenseScreen(),
         '/saved_savings_plans': (context) => SavedSavingsPlansScreen(),
 

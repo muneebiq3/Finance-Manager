@@ -167,14 +167,20 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         child: Column(
           children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(user?.displayName ?? "User Name", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              accountEmail: Text(user?.email ?? "user@example.com", style: TextStyle(fontSize: 14)),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 40, color: Color(0xFF266DD1)),
+            GestureDetector(
+              child: UserAccountsDrawerHeader(
+                accountName: Text(user?.displayName ?? "User Name", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                accountEmail: Text(user?.email ?? "user@example.com", style: TextStyle(fontSize: 14)),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, size: 40, color: Color(0xFF266DD1)),
+                ),
+                decoration: BoxDecoration(color: Color(0xFF266DD1)),
               ),
-              decoration: BoxDecoration(color: Color(0xFF266DD1)),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              ),
             ),
             Expanded(
               child: Container(
@@ -183,14 +189,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     SizedBox(height: 20),
                     ListTile(
-                      leading: Icon(Icons.savings, color: Colors.black),
-                      title: Text("Savings Plan", style: TextStyle(color: Colors.black, fontSize: 18)),
+                      leading: Icon(
+                        Icons.savings, 
+                        color: Colors.black
+                      ),
+                      title: Text(
+                        "Savings Plan", 
+                        style: TextStyle(
+                          color: Colors.black, 
+                          fontSize: 18
+                        )
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => SavingsPlanScreen()),
                         );
                       },
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.logout, 
+                        color: Colors.black
+                      ),
+                      title: Text(
+                        "Logout", 
+                        style: TextStyle(
+                          color: Colors.black, 
+                          fontSize: 18
+                        )
+                      ),
+                      onTap: () => logout()
                     ),
                   ],
                 ),
@@ -240,8 +269,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       ),
                       IconButton(
-                        onPressed: logout, 
-                        icon: const Icon(Icons.logout),
+                        onPressed: () {}, 
+                        icon: const Icon(Icons.notifications_active),
                         color: Colors.white,
                         iconSize: 30,
                       )
@@ -249,7 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 20),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 70, vertical: 40),
+                    padding: EdgeInsets.symmetric(vertical: 40),
                     child: GestureDetector(
                       onTap: () {},
                       child: Container(
@@ -267,14 +296,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               'Month: $currentMonth', 
                               style: TextStyle(
                                 color: const Color(0xFF898C8D), 
-                                fontSize: 16
+                                fontSize: 18
                               )
                             ),
                             const SizedBox(height: 12),
                             Text(
                               "Total Income: \$${totalIncome.toStringAsFixed(2)}", 
                               style: TextStyle(
-                                fontSize: 16, 
+                                fontSize: 18, 
                                 color: const Color(0xFF898C8D)
                               )
                             ),
@@ -282,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text(
                               "Remaining Balance: \$${remainingBalance.toStringAsFixed(2)}", 
                               style: TextStyle(
-                                fontSize: 19, 
+                                fontSize: 21, 
                                 color:  Color(0xFF343740),
                                 fontWeight: FontWeight.bold
                               )
@@ -315,32 +344,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 16,
                               color: Colors.white
                             ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white
+                              )
+                            ),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.white
                               )
                             )
                           ),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
-                      SizedBox(width: 20),
-                      // ElevatedButton(
-                      //   onPressed: () async {
-
-                      //   },
-                      //   style: ElevatedButton.styleFrom(
-                      //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                      //     backgroundColor: Color(0xFF266DD1),
-                      //   ),
-                      //   child: Text(
-                      //     "Add Expense", 
-                      //     style: TextStyle(
-                      //       fontWeight: FontWeight.bold, 
-                      //       fontSize: 12, 
-                      //       color: Colors.white
-                      //     )
-                      //   ),
-                      // ),
                     ],
                   ),
                   const SizedBox(height: 10,),
@@ -349,12 +366,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () async {
-                            final result = await Navigator.pushNamed(context, '/add_income');
-                            if (result != null) {
-                              double newIncome = result as double;
-                              updateIncome(newIncome);
-                            }
-                          }, style: ElevatedButton.styleFrom(
+                            double budget = double.tryParse(_budgetController.text) ?? 0;
+                            double newIncome = budget;
+                            updateIncome(newIncome);
+                          }, 
+                          style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFF266DD1)
                           ),
                           child: const Text(
@@ -380,12 +396,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 16,
                               color: Colors.white
                             ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white
+                              )
+                            ),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.white
                               )
                             )
                           ),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ],
@@ -403,12 +425,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: 16,
                               color: Colors.white
                             ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white
+                              )
+                            ),
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                 color: Colors.white
                               )
                             )
                           ),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ],
@@ -418,7 +446,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     'Selected date: ${DateFormat.yMMMd().format(_selectedDate)}',
                     style: const TextStyle(
                       fontSize: 16, 
-                      color: Colors.black
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold
                     ),
                   ),
                   ElevatedButton(
@@ -432,7 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   ),
                   SizedBox(
-                    height: 300,
+                    height: 100,
                     child: ListView(
                       children: categoryExpenses.entries.map((entry) {
                         return Container(
@@ -445,15 +474,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(entry.key, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                              Text("\$${entry.value.toStringAsFixed(2)}", style: TextStyle(fontSize: 18, color: Colors.green, fontWeight: FontWeight.bold)),
+                              Text (
+                                entry.key, 
+                                style: TextStyle(
+                                  fontSize: 18, 
+                                  fontWeight: FontWeight.bold, 
+                                  color: Colors.white
+                                )
+                              ),
+                              Text(
+                                "\$${entry.value.toStringAsFixed(2)}",
+                                style: TextStyle(
+                                  fontSize: 18, 
+                                  color: Colors.green, 
+                                  fontWeight: FontWeight.bold
+                                )
+                              ),
                             ],
                           ),
                         );
                       }).toList(),
                     ),
                   ),
-                  const SizedBox(height: 35),
                   Row(
                     children: [
                       Expanded(
