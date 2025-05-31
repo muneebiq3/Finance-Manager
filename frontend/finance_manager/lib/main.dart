@@ -6,7 +6,7 @@ import 'firebase_options.dart';
 
 import 'screens/LoginScreen.dart';
 import 'screens/SignupScreen.dart';
-import 'screens/DashboardScreen.dart';
+import 'screens/HomeScreen.dart';
 import 'screens/SavedSavingsPlanScreen.dart';
 import 'screens/AddIncomeScreen.dart';
 import 'screens/AddExpenseScreen.dart';
@@ -28,16 +28,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'AI-Powered Finance Manager',
       theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        scaffoldBackgroundColor: Colors.grey[100],
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.deepPurple,
-            foregroundColor: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-            textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
+        primarySwatch: Colors.orange
       ),
       home: FirebaseAuth.instance.currentUser == null
           ? const LoginScreen()

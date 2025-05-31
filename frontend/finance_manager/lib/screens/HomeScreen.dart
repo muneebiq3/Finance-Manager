@@ -143,69 +143,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     double remainingBalance = totalIncome - spentAmount;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Finance Dashboard",
-          style: 
-            TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.teal,
+      drawer: Drawer(
         
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.deepPurple[900],
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()),
-                );
-              },
-              child: UserAccountsDrawerHeader(
-                accountName: Text(user?.displayName?? "User Name", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                accountEmail: Text(user?.email ?? "user@example.com", style: TextStyle(fontSize: 14)),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 40, color: Colors.deepPurple),
-                ),
-                decoration: BoxDecoration(color: Colors.deepPurple),
-              ),
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              leading: Icon(Icons.logout, color: Colors.white),
-              title: Text("Logout", style: TextStyle(color: Colors.white, fontSize: 18)),
-              onTap: logout,
-              
-            ),
-            SizedBox(height: 20),
-            ListTile(
-              leading: Icon(Icons.savings, color: Colors.white),
-              title: Text("Savings Plan", style: TextStyle(color: Colors.white, fontSize: 18)),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SavingsPlanScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
       body: Container(
+        height: double.infinity,
+        width: double.infinity,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/wallpaper.jpg'),
-            fit: BoxFit.cover,
-            onError: (exception, stackTrace) {
-              print("Image load error: $exception");
-            },
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF266DD1), // Darker shade
+              Color(0xFF90B3E9), // Primary theme color
+              Color(0xFFB3CFF1), // Lighter shade
+            ],
           ),
         ),
         child: Padding(
@@ -213,24 +165,75 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Dashboard",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white
+                    )
+                  ),
+                ],
+              ),
               SizedBox(height: 20),
-              Card(
-                elevation: 6,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('MONTH: $currentMonth', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18)),
-                      SizedBox(height: 12),
-                      Text("Total Income: \$${totalIncome.toStringAsFixed(2)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 12),
-                      Text("Remaining Balance: \$${remainingBalance.toStringAsFixed(2)}", style: TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.bold)),
-                    ],
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 100),
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      width: MediaQuery.of(context).size.width / 2,
+                      decoration: BoxDecoration(
+                        color:  const Color(0xFFEEEEF1).withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(7)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 40,
+                            width: 40,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(7)
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Month: $currentMonth', 
+                            style: TextStyle(
+                              color: const Color(0xFF898C8D), 
+                              fontSize: 14
+                            )
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            "Total Income: \$${totalIncome.toStringAsFixed(2)}", 
+                            style: TextStyle(
+                              fontSize: 14, 
+                              color: const Color(0xFF898C8D)
+                            )
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            "Remaining Balance: \$${remainingBalance.toStringAsFixed(2)}", 
+                            style: TextStyle(
+                              fontSize: 14, 
+                              color: Colors.green, 
+                            )
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              
               SizedBox(height: 20),
               LinearProgressIndicator(
                 value: totalIncome == 0 ? 0 : spentAmount / totalIncome,
@@ -239,7 +242,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 minHeight: 15,
               ),
               SizedBox(height: 10),
-              Text("Spent: \$${spentAmount.toStringAsFixed(2)} / \$${totalIncome.toStringAsFixed(2)}", style: TextStyle(fontSize: 18, color: Colors.orangeAccent, fontWeight: FontWeight.bold)),
+              Text("Spent: \$${spentAmount.toStringAsFixed(2)} / \$${totalIncome.toStringAsFixed(2)}", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
               SizedBox(height: 30),
               // Buttons
               Row(
@@ -257,7 +260,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                       backgroundColor: Colors.deepPurple[800], // Replace primary with backgroundColor
                     ),
-                    child: Text("Add Income", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+                    child: Text("Add Income", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white)),
                   ),
                   SizedBox(width: 20),
                   ElevatedButton(
@@ -272,7 +275,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
                       backgroundColor: Colors.deepPurple[800], // Replace primary with backgroundColor
                     ),
-                    child: Text("Add Expense", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+                    child: Text("Add Expense", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white)),
                   ),
                 ],
               ),
