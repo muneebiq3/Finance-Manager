@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 import 'SavingsPlanScreen.dart';
 import 'ProfileScreen.dart';
@@ -20,7 +21,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String? userId;
   String currentMonth = "";
   User? user;
+  DateTime _selectedDate = DateTime.now();
   final TextEditingController _budgetController = TextEditingController();
+  final TextEditingController _expenseController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -138,6 +142,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> logout() async {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacementNamed(context, '/login_screen');
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
   }
 
   @override
@@ -305,14 +323,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      // SizedBox(width: 20),
+                      SizedBox(width: 20),
                       // ElevatedButton(
                       //   onPressed: () async {
-                      //     final result = await Navigator.pushNamed(context, '/add_expense');
-                      //     if (result != null) {
-                      //       Map<String, dynamic> expenseData = result as Map<String, dynamic>;
-                      //       addExpense(expenseData['category'], expenseData['amount']);
-                      //     }
+
                       //   },
                       //   style: ElevatedButton.styleFrom(
                       //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
@@ -353,10 +367,72 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  // Updated Expenses List
+                  Row (
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _expenseController,
+                          keyboardType: TextInputType.number,
+                          cursorColor: Colors.white,
+                          decoration: const InputDecoration(
+                            labelText: "Enter expense amount (PKR)",
+                            labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white
+                              )
+                            )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row (
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _descriptionController,
+                          keyboardType: TextInputType.number,
+                          cursorColor: Colors.white,
+                          decoration: const InputDecoration(
+                            labelText: "Enter description",
+                            labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white
+                              )
+                            )
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Selected date: ${DateFormat.yMMMd().format(_selectedDate)}',
+                    style: const TextStyle(
+                      fontSize: 16, 
+                      color: Colors.black
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _selectDate(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF266DD1)
+                    ), 
+                    child: const Text(
+                      "Select Date",
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ),
                   SizedBox(
-                    height: 300, // or MediaQuery.of(context).size.height * 0.4
+                    height: 300,
                     child: ListView(
                       children: categoryExpenses.entries.map((entry) {
                         return Container(
@@ -376,6 +452,31 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }).toList(),
                     ),
+                  ),
+                  const SizedBox(height: 35),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final result = await Navigator.pushNamed(context, '/add_expense');
+                            if (result != null) {
+                              Map<String, dynamic> expenseData = result as Map<String, dynamic>;
+                              addExpense(expenseData['category'], expenseData['amount']);
+                            }
+                          }, 
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF266DD1)
+                          ),
+                          child: const Text(
+                            "Add Expense",
+                            style: TextStyle(
+                              color: Colors.white
+                            ),
+                          )
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
