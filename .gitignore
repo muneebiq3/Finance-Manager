@@ -1,0 +1,1 @@
+echo "backend/flask_api/firebase_key.json" >> .gitignore
