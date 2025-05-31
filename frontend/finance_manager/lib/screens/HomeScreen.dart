@@ -5,20 +5,22 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'SavingsPlanScreen.dart';
 import 'ProfileScreen.dart';
 
-class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  _DashboardScreenState createState() => _DashboardScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double totalIncome = 0;
   double spentAmount = 0;
   Map<String, double> categoryExpenses = {};
   String? userId;
   String currentMonth = "";
   User? user;
+  final TextEditingController _budgetController = TextEditingController();
 
   @override
   void initState() {
@@ -143,8 +145,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
     double remainingBalance = totalIncome - spentAmount;
 
     return Scaffold(
+      key: _scaffoldKey,
       drawer: Drawer(
-        
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(user?.displayName ?? "User Name", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              accountEmail: Text(user?.email ?? "user@example.com", style: TextStyle(fontSize: 14)),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person, size: 40, color: Color(0xFF266DD1)),
+              ),
+              decoration: BoxDecoration(color: Color(0xFF266DD1)),
+            ),
+            Expanded(
+              child: Container(
+                color: const Color(0xFFEEEEF1).withOpacity(0.8),
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    ListTile(
+                      leading: Icon(Icons.savings, color: Colors.black),
+                      title: Text("Savings Plan", style: TextStyle(color: Colors.black, fontSize: 18)),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SavingsPlanScreen()),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       body: Container(
         height: double.infinity,
@@ -160,149 +195,191 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Dashboard",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white
-                    )
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      width: MediaQuery.of(context).size.width / 2,
-                      decoration: BoxDecoration(
-                        color:  const Color(0xFFEEEEF1).withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(7)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          _scaffoldKey.currentState?.openDrawer();
+                        }, 
+                        icon: const Icon(Icons.menu),
+                        iconSize: 30,
+                        color: Colors.white,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 40,
-                            width: 40,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(7)
+                      Text(
+                        "Dashboard",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white
+                        )
+                      ),
+                      IconButton(
+                        onPressed: logout, 
+                        icon: const Icon(Icons.logout),
+                        color: Colors.white,
+                        iconSize: 30,
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 70, vertical: 40),
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 30),
+                        width: MediaQuery.of(context).size.width / 1,
+                        decoration: BoxDecoration(
+                          color:  const Color(0xFFEEEEF1).withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(7)
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 12),
+                            Text(
+                              'Month: $currentMonth', 
+                              style: TextStyle(
+                                color: const Color(0xFF898C8D), 
+                                fontSize: 16
+                              )
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Month: $currentMonth', 
-                            style: TextStyle(
-                              color: const Color(0xFF898C8D), 
-                              fontSize: 14
-                            )
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            "Total Income: \$${totalIncome.toStringAsFixed(2)}", 
-                            style: TextStyle(
-                              fontSize: 14, 
-                              color: const Color(0xFF898C8D)
-                            )
-                          ),
-                          SizedBox(height: 12),
-                          Text(
-                            "Remaining Balance: \$${remainingBalance.toStringAsFixed(2)}", 
-                            style: TextStyle(
-                              fontSize: 14, 
-                              color: Colors.green, 
-                            )
-                          ),
-                        ],
+                            const SizedBox(height: 12),
+                            Text(
+                              "Total Income: \$${totalIncome.toStringAsFixed(2)}", 
+                              style: TextStyle(
+                                fontSize: 16, 
+                                color: const Color(0xFF898C8D)
+                              )
+                            ),
+                            SizedBox(height: 12),
+                            Text(
+                              "Remaining Balance: \$${remainingBalance.toStringAsFixed(2)}", 
+                              style: TextStyle(
+                                fontSize: 19, 
+                                color:  Color(0xFF343740),
+                                fontWeight: FontWeight.bold
+                              )
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              
-              SizedBox(height: 20),
-              LinearProgressIndicator(
-                value: totalIncome == 0 ? 0 : spentAmount / totalIncome,
-                backgroundColor: Colors.grey[300],
-                color: Colors.red,
-                minHeight: 15,
-              ),
-              SizedBox(height: 10),
-              Text("Spent: \$${spentAmount.toStringAsFixed(2)} / \$${totalIncome.toStringAsFixed(2)}", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
-              SizedBox(height: 30),
-              // Buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      final result = await Navigator.pushNamed(context, '/add_income');
-                      if (result != null) {
-                        double newIncome = result as double;
-                        updateIncome(newIncome);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                      backgroundColor: Colors.deepPurple[800], // Replace primary with backgroundColor
-                    ),
-                    child: Text("Add Income", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white)),
+                  LinearProgressIndicator(
+                    value: totalIncome == 0 ? 0 : spentAmount / totalIncome,
+                    backgroundColor: Colors.grey[300],
+                    color: Colors.red,
+                    minHeight: 15,
                   ),
-                  SizedBox(width: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final result = await Navigator.pushNamed(context, '/add_expense');
-                      if (result != null) {
-                        Map<String, dynamic> expenseData = result as Map<String, dynamic>;
-                        addExpense(expenseData['category'], expenseData['amount']);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                      backgroundColor: Colors.deepPurple[800], // Replace primary with backgroundColor
+                  SizedBox(height: 10),
+                  Text("Spent: \$${spentAmount.toStringAsFixed(2)} / \$${totalIncome.toStringAsFixed(2)}", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 30),
+                  // Buttons
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _budgetController,
+                          keyboardType: TextInputType.number,
+                          cursorColor: Colors.white,
+                          decoration: const InputDecoration(
+                            labelText: "Enter this month's budget (PKR)",
+                            labelStyle: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white
+                              )
+                            )
+                          ),
+                        ),
+                      ),
+                      // SizedBox(width: 20),
+                      // ElevatedButton(
+                      //   onPressed: () async {
+                      //     final result = await Navigator.pushNamed(context, '/add_expense');
+                      //     if (result != null) {
+                      //       Map<String, dynamic> expenseData = result as Map<String, dynamic>;
+                      //       addExpense(expenseData['category'], expenseData['amount']);
+                      //     }
+                      //   },
+                      //   style: ElevatedButton.styleFrom(
+                      //     padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      //     backgroundColor: Color(0xFF266DD1),
+                      //   ),
+                      //   child: Text(
+                      //     "Add Expense", 
+                      //     style: TextStyle(
+                      //       fontWeight: FontWeight.bold, 
+                      //       fontSize: 12, 
+                      //       color: Colors.white
+                      //     )
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                  const SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final result = await Navigator.pushNamed(context, '/add_income');
+                            if (result != null) {
+                              double newIncome = result as double;
+                              updateIncome(newIncome);
+                            }
+                          }, style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF266DD1)
+                          ),
+                          child: const Text(
+                            "Set Monthly Budget",
+                            style: TextStyle(
+                              color: Colors.white
+                            ),
+                          )
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  // Updated Expenses List
+                  SizedBox(
+                    height: 300, // or MediaQuery.of(context).size.height * 0.4
+                    child: ListView(
+                      children: categoryExpenses.entries.map((entry) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          padding: EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(entry.key, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+                              Text("\$${entry.value.toStringAsFixed(2)}", style: TextStyle(fontSize: 18, color: Colors.green, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        );
+                      }).toList(),
                     ),
-                    child: Text("Add Expense", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white)),
                   ),
                 ],
               ),
-              SizedBox(height: 20),
-              // Updated Expenses List
-              Expanded(
-                child: ListView(
-                  children: categoryExpenses.entries.map((entry) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      padding: EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(entry.key, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
-                          Text("\$${entry.value.toStringAsFixed(2)}", style: TextStyle(fontSize: 18, color: Colors.green, fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userCredential.user != null) {
         // Navigate to home screen if sign-in is successful
         if (context.mounted) {
-          Navigator.pushReplacementNamed(context, '/dashboard_screen');
+          Navigator.pushReplacementNamed(context, '/home_screen');
         }
       }
     }
@@ -84,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextField(
       controller: controller,
       obscureText: hide,
+      cursorColor: Colors.white,
       decoration: InputDecoration(
         labelText: title,
         labelStyle: const TextStyle(color: Colors.white),
@@ -95,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
           borderRadius: BorderRadius.circular(8.0),
           borderSide: BorderSide.none,
         ),
+        
       ),
       style: const TextStyle(color: Colors.white),
     );
@@ -104,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextField(
       controller: controller,
       obscureText: hidePassword,
+      cursorColor: Colors.white,
       decoration: InputDecoration(
         labelText: title,
         labelStyle: const TextStyle(color: Colors.white),

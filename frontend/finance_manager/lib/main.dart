@@ -32,11 +32,11 @@ class MyApp extends StatelessWidget {
       ),
       home: FirebaseAuth.instance.currentUser == null
           ? const LoginScreen()
-          : const DashboardScreen(),
+          : const HomeScreen(),
       routes: {
         '/signup_screen': (context) => SignupScreen(),
         '/login_screen': (context) => LoginScreen(),
-        '/dashboard_screen': (context) => DashboardScreen(),
+        '/home_screen': (context) => HomeScreen(),
         '/add_income': (context) => AddIncomeScreen(),
         '/add_expense': (context) => AddExpenseScreen(),
         '/saved_savings_plans': (context) => SavedSavingsPlansScreen(),

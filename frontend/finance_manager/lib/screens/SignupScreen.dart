@@ -150,6 +150,7 @@ class _SignupScreenState extends State<SignupScreen> {
       height: 45,
       child: TextField(
         controller: controller,
+        cursorColor: Colors.white,
         decoration: InputDecoration(
           labelText: title,
           labelStyle: const TextStyle(color: Colors.white),
@@ -173,6 +174,7 @@ class _SignupScreenState extends State<SignupScreen> {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
+        cursorColor: Colors.white,
         decoration: InputDecoration(
           labelText: title,
           labelStyle: const TextStyle(color: Colors.white),
@@ -269,11 +271,11 @@ class _SignupScreenState extends State<SignupScreen> {
               children: <Widget>[
                 _title(),
                 const SizedBox(height: 20),
-                _entryField('Name', _controllerName, 'Enter Name'),
+                _entryField('Name', _controllerName, 'Enter your name'),
                 const SizedBox(height: 20),
-                _entryField('Email', _controllerEmail, 'Enter your Email'),
+                _entryField('Email', _controllerEmail, 'Enter your email'),
                 const SizedBox(height: 20),
-                _entryField('Contact', _controllerContact, 'Enter your Contact'),
+                _entryField('Contact', _controllerContact, 'Enter your contact'),
                 const SizedBox(height: 20),
                 _passwordField(
                   'Password',
