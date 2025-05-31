@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _title() {
     return const Text(
-      "AI-Powered Finance Manager",
+      "Smart Finance",
       style: TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.bold,

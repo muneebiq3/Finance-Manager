@@ -136,7 +136,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   Widget _title() {
     return const Text(
-      "AI-Powered Finance Manager",
+      "Smart Finance",
       style: TextStyle(
         fontSize: 28,
         fontWeight: FontWeight.bold,
