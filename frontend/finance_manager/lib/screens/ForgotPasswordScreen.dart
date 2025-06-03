@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
+
+import '../widgets/AnimatedSnackBar.dart';
 
 import '../themes/images.dart';
 
@@ -15,40 +16,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   final _controllerEmail = TextEditingController();
   bool _isLoading = false;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  void _showTopSnackBar(BuildContext context, String message) {
-    showTopSnackBar(
-      Overlay.of(context),
-      Material(
-        color: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            color: Color(0xFF90B3E9),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                offset: Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Text(
-            message,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ),
-      displayDuration: const Duration(seconds: 3),
-    );
-  }
 
   Future <void> _resetPassword(BuildContext context) async{
 
@@ -57,7 +24,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     try {
       
       if(email.isEmpty) {
-        _showTopSnackBar(context, 'Please enter your email!');
+        AnimatedSnackBar.show(context, 'Please enter your email!');
         return;
       }
 
@@ -66,7 +33,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       });
 
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      _showTopSnackBar(context, 'If this email is registered, a reset link has been sent to: $email');
+      AnimatedSnackBar.show(context, 'If this email is registered, a reset link has been sent to: $email');
 
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'An error occurred';
@@ -77,7 +44,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       } else {
         errorMessage = e.message ?? errorMessage;
       }
-      _showTopSnackBar(context, errorMessage);
+      AnimatedSnackBar.show(context, errorMessage);
     } 
     finally {
       setState(() {
@@ -152,7 +119,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
 
     double width = MediaQuery.sizeOf(context).width;
-    double height = MediaQuery.sizeOf(context).height;
 
     return Scaffold(
       body: Container(
