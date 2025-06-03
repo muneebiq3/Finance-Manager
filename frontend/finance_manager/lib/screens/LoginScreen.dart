@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import 'SignupScreen.dart';
-import 'ForgotPasswordScreen.dart';
 import '../themes/images.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -37,6 +37,28 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _controllerEmail.text;
     String password = _controllerPassword.text;
 
+    
+    if (email.isEmpty && password.isEmpty) {
+      _showTopSnackBar(context, 'Please enter your credentials!');
+      return;
+    }
+
+    if (email.isEmpty) {
+      _showTopSnackBar(context, 'Please enter your email!');
+      return;
+    }
+
+    
+    if (!email.contains('@')) {
+      _showTopSnackBar(context, "Please enter a valid email address!");
+      return;
+    }
+
+    if (password.isEmpty) {
+      _showTopSnackBar(context, 'Please enter the password!');
+      return;
+    }
+
     try {
 
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -44,9 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
         password: password,
       );
 
-      setState(() {
-        successMessage = 'Logged in successfully!';
-      });
+      _showTopSnackBar(context, 'Logged in successfully!');
 
       await Future.delayed(const Duration(seconds: 2));
 
@@ -59,9 +79,40 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
+
+      String errorMessage = 'An error occurred';
+
+      switch (e.code) {
+
+        case 'invalid-email':
+          errorMessage = 'The email is badly formatted!';
+          break;
+
+        case 'user-not-found':
+          errorMessage = 'No user found for that email.';
+          break;
+
+        case 'wrong-password':
+          errorMessage = 'Incorrect password. Please try again.';
+          break;
+
+        case 'user-disabled':
+          errorMessage = 'This user has been disabled.';
+          break;
+
+        case 'too-many-requests':
+          errorMessage = 'Too many attempts. Try again later.';
+          break;
+
+        default:
+          errorMessage = e.message ?? errorMessage;
+
+      }
+
+      if (context.mounted) {
+        _showTopSnackBar(context, errorMessage);
+      }
+
     }
 
     catch (e) {
@@ -145,17 +196,36 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _errorMessage() {
-    return Text(
-      errorMessage == '' ? '' : '$errorMessage',
-      style: const TextStyle(color: Colors.red),
-    );
-  }
-
-  Widget _successMessage() {
-    return Text(
-    successMessage.isEmpty ? '' : successMessage,
-      style: const TextStyle(color: Colors.white, fontSize: 20),
+  void _showTopSnackBar(BuildContext context, String message) {
+    showTopSnackBar(
+      Overlay.of(context),
+      Material(
+        color: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Color(0xFF90B3E9),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Text(
+            message,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+      displayDuration: const Duration(seconds: 3),
     );
   }
 
@@ -321,8 +391,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       _forgotPasswordButton(),
                     ],
                   ),
-                  _errorMessage(),
-                  _successMessage(),
                   _loginButton(),
                   const SizedBox(height: 20),
                   Divider(color: Colors.white),
