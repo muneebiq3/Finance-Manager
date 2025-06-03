@@ -1,6 +1,0 @@
-flask
-gunicorn
-transformers
-torch
-firebase-admin
-...

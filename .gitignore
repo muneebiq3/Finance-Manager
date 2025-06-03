@@ -1,1 +1,62 @@
-echo "backend/flask_api/firebase_key.json" >> .gitignore
+# ========================
+# Flutter-specific ignores
+# ========================
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/pubspec.lock
+**/flutter_*.png
+**/.idea/
+**/*.iml
+**/.vscode/
+
+# Flutter crash logs
+**/flutter_*.log
+
+# Android/iOS platform folders (optional)
+**/android/.gradle/
+**/android/.idea/
+**/android/local.properties
+**/android/.settings/
+**/ios/Pods/
+**/ios/Flutter/Generated.xcconfig
+
+# Mac build files
+**/*.xcworkspace
+**/*.xcuserstate
+
+# ========================
+# Flask (Python backend)
+# ========================
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.Python
+backend/env/
+backend/venv/
+backend/.venv/
+backend/instance/
+backend/.mypy_cache/
+backend/.pytest_cache/
+backend/.coverage
+backend/coverage.xml
+backend/htmlcov/
+backend/.vscode/
+backend/.idea/
+
+# Sensitive data
+backend/flask_api/firebase_key.json
+.env
+*.env
+
+# ========================
+# General
+# ========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.lock
