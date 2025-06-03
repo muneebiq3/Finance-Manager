@@ -73,7 +73,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _title() {
-    return Image.asset(Images.wallet, height: 100, width: 100,);
+    return Image.asset(
+      Images.wallet, 
+      height: 100, 
+      width: 100
+    );
   }
 
   Widget _message() {
@@ -299,45 +303,42 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _title(),
-                const SizedBox(height: 40),
-                _message(),
-                const SizedBox(height: 40),
-                _entryField('Email', _controllerEmail, 'Enter your Email', false),
-                const SizedBox(height: 20),
-                _passwordField('Password', _controllerPassword, 'Enter Password'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _forgotPasswordButton(),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                _errorMessage(),
-                const SizedBox(height: 20),
-                _successMessage(),
-                const SizedBox(height: 10),
-                _loginButton(),
-                const SizedBox(height: 20),
-                Divider(color: Colors.white),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _googleLoginButton(),
-                    const SizedBox(width: 10),
-                    _githubLoginButton(),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                _signUpButton(),
-              ],
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  _title(),
+                  _message(),
+                  const SizedBox(height: 20),
+                  _entryField('Email', _controllerEmail, 'Enter your Email', false),
+                  const SizedBox(height: 20),
+                  _passwordField('Password', _controllerPassword, 'Enter Password'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _forgotPasswordButton(),
+                    ],
+                  ),
+                  _errorMessage(),
+                  _successMessage(),
+                  _loginButton(),
+                  const SizedBox(height: 20),
+                  Divider(color: Colors.white),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _googleLoginButton(),
+                      const SizedBox(width: 10),
+                      _githubLoginButton(),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _signUpButton(),
+                ],
+              ),
             ),
           ),
         ),

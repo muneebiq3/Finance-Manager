@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'LoginScreen.dart';
+import '../themes/images.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -135,10 +136,18 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   Widget _title() {
+    return Image.asset(
+      Images.wallet, 
+      height: 100, 
+      width: 100
+    );
+  }
+
+  Widget _message() {
     return const Text(
-      "Smart Finance",
+      "Register for a better, faster experience!",
       style: TextStyle(
-        fontSize: 28,
+        fontSize: 16,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
@@ -263,51 +272,53 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _title(),
-                const SizedBox(height: 20),
-                _entryField('Name', _controllerName, 'Enter your name'),
-                const SizedBox(height: 20),
-                _entryField('Email', _controllerEmail, 'Enter your email'),
-                const SizedBox(height: 20),
-                _entryField('Contact', _controllerContact, 'Enter your contact'),
-                const SizedBox(height: 20),
-                _passwordField(
-                  'Password',
-                  _controllerPassword, 
-                  'Enter Password', 
-                  hidePassword, 
-                  () {
-                    setState(() {
-                      hidePassword = !hidePassword;
-                    });
-                  }
-                ),
-                const SizedBox(height: 20),
-                _passwordField(
-                  'Confirm Password',
-                  _controllerConfirmPassword, 
-                  'Please confirm Password', 
-                  hideConfirmPassword, () {
-                    setState(() {
-                      hideConfirmPassword = !hideConfirmPassword;
-                    });
-                  }
-                ),
-                const SizedBox(height: 4),
-                _errorMessage(),
-                const SizedBox(height: 10),
-                _successMessage(),
-                const SizedBox(height: 10),
-                _signUpButton(),
-                const SizedBox(height: 10),
-                _logInButton(),
-              ], 
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  _title(),
+                  _message(),
+                  const SizedBox(height: 20,),
+                  _entryField('Name', _controllerName, 'Enter your name'),
+                  const SizedBox(height: 20),
+                  _entryField('Email', _controllerEmail, 'Enter your email'),
+                  const SizedBox(height: 20),
+                  _entryField('Contact', _controllerContact, 'Enter your contact'),
+                  const SizedBox(height: 20),
+                  _passwordField(
+                    'Password',
+                    _controllerPassword, 
+                    'Enter Password', 
+                    hidePassword, 
+                    () {
+                      setState(() {
+                        hidePassword = !hidePassword;
+                      });
+                    }
+                  ),
+                  const SizedBox(height: 20),
+                  _passwordField(
+                    'Confirm Password',
+                    _controllerConfirmPassword, 
+                    'Please confirm Password', 
+                    hideConfirmPassword, () {
+                      setState(() {
+                        hideConfirmPassword = !hideConfirmPassword;
+                      });
+                    }
+                  ),
+                  const SizedBox(height: 4),
+                  _errorMessage(),
+                  const SizedBox(height: 10),
+                  _successMessage(),
+                  const SizedBox(height: 10),
+                  _signUpButton(),
+                  const SizedBox(height: 10),
+                  _logInButton(),
+                ], 
+              ),
             ),
           ),
         ),

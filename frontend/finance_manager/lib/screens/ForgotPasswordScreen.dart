@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+
 import '../themes/images.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -13,26 +15,50 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   final _controllerEmail = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void _showTopSnackBar(BuildContext context, String message) {
+    showTopSnackBar(
+      Overlay.of(context),
+      Material(
+        color: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            color: Color(0xFF90B3E9),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Text(
+            message,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+      displayDuration: const Duration(seconds: 3),
+    );
+  }
 
   Future <void> _resetPassword(BuildContext context) async{
 
     String email = _controllerEmail.text.trim();
 
-    if(!_formKey.currentState!.validate()) return;
-
     try {
       
       if(email.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Please enter your email!"
-            )
-          )
-        );
+        _showTopSnackBar(context, 'Please enter your email!');
         return;
       }
 
@@ -41,22 +67,18 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       });
 
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Reset Password link sent to $email"
-            )
-          )
-        );
+      _showTopSnackBar(context, 'If this email is registered, a reset link has been sent to: $email');
 
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            '${e.message}'
-          )
-        )
-      );
+      String errorMessage = 'An error occurred';
+      if (e.code == 'invalid-email') {
+        errorMessage = 'The email address is badly formatted!';
+      } else if (e.code == 'user-not-found') {
+        errorMessage = 'No user found with this email.';
+      } else {
+        errorMessage = e.message ?? errorMessage;
+      }
+      _showTopSnackBar(context, errorMessage);
     } 
     finally {
       setState(() {
@@ -89,30 +111,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Widget _entryField(String title, TextEditingController controller, String placeholder, bool hide) {
-    return Form(
-      key: _formKey,
-      child: TextFormField(
-        controller: controller,
-        obscureText: hide,
-        cursorColor: Colors.white,
-        decoration: InputDecoration(
-          labelText: title,
-          labelStyle: const TextStyle(color: Colors.white),
-          hintText: placeholder,
-          hintStyle: const TextStyle(color: Colors.white70),
-          filled: true,
-          fillColor: Colors.white.withOpacity(0.2),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide.none,
-          ),
-          
+    return TextFormField(
+      controller: controller,
+      obscureText: hide,
+      cursorColor: Colors.white,
+      decoration: InputDecoration(
+        labelText: title,
+        labelStyle: const TextStyle(color: Colors.white),
+        hintText: placeholder,
+        hintStyle: const TextStyle(color: Colors.white70),
+        filled: true,
+        fillColor: Colors.white.withOpacity(0.2),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide.none,
         ),
-        style: const TextStyle(color: Colors.white),
-        validator: (value) => value == null || !value.contains('@')
-          ? 'Enter a valid email!'
-          : null
       ),
+      style: const TextStyle(color: Colors.white),
     );
   }
 
