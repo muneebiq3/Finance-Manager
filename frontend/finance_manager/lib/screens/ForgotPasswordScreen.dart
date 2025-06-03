@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/AnimatedSnackBar.dart';
-
-import '../themes/images.dart';
+import '../widgets/ManualWidgets.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -61,64 +60,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     super.dispose();
   }
 
-  Widget _title() {
-    return Image.asset(Images.wallet, height: 100, width: 100,);
-  }
-
-  Widget _message() {
-    return const Text(
-      "Smart Finance - Reset Password",
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-    );
-  }
-
-  Widget _entryField(String title, TextEditingController controller, String placeholder, bool hide) {
-    return TextFormField(
-      controller: controller,
-      obscureText: hide,
-      cursorColor: Colors.white,
-      decoration: InputDecoration(
-        labelText: title,
-        labelStyle: const TextStyle(color: Colors.white),
-        hintText: placeholder,
-        hintStyle: const TextStyle(color: Colors.white70),
-        filled: true,
-        fillColor: Colors.white.withOpacity(0.2),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide.none,
-        ),
-      ),
-      style: const TextStyle(color: Colors.white),
-    );
-  }
-
-  Widget _sendButton(double width, BuildContext context) {
-    return SizedBox(
-      width: width * 1,
-      child: ElevatedButton(
-        onPressed: () => _isLoading ? null : _resetPassword(context),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          foregroundColor: const Color(0xFF90B3E9), // Theme color for button text
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-        ),
-        child: const Text('Reset Password'),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-
-    double width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
       body: Container(
@@ -156,13 +99,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      _title(),
+                      ManualWidgets.title(),
                       const SizedBox(height: 40),
-                      _message(),
+                      ManualWidgets.message("Smart Finance - Forgot Password"),
                       const SizedBox(height: 40),
-                      _entryField('Email', _controllerEmail, 'Enter your Email', false),
+
+                      ManualWidgets.entryField(
+                        'Email',
+                        _controllerEmail, 
+                        'Enter your Email', 
+                        false
+                      ),
                       const SizedBox(height: 20),
-                      Builder(builder: (context) => _sendButton(width, context)),
+                      ManualWidgets.sendButton(
+                        text: 'Forgot Password',
+                        width: MediaQuery.of(context).size.width * 1, // or just any width you want
+                        isLoading: _isLoading,
+                        onPressed: () => _resetPassword(context),
+                      )
                     ],
                   ),
                 ),

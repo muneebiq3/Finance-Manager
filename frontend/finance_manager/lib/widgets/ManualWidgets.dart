@@ -192,6 +192,38 @@ class ManualWidgets extends StatefulWidget {
 
   }
 
+  static Widget sendButton ({
+
+    required String text,
+    required double width,
+    required bool isLoading,
+    required VoidCallback onPressed,
+
+  }) {
+
+    return SizedBox(
+
+      width: width,
+      child: ElevatedButton(
+
+        onPressed: isLoading ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+
+          backgroundColor: Colors.white,
+          foregroundColor: const Color(0xFF90B3E9), // Theme color for button text
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+
+        ),
+
+        child: Text(text),
+      ),
+    );
+  }
+
 }
 
 class _ManualWidgetsState extends State<ManualWidgets> {

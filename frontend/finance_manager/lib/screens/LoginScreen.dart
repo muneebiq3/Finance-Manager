@@ -182,7 +182,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ManualWidgets.title(),
                   ManualWidgets.message("Welcome back, you have been missed!"),
                   const SizedBox(height: 20),
-                  ManualWidgets.entryField('Email', _controllerEmail, 'Enter your Email', false),
+
+                  ManualWidgets.entryField(
+                    'Email',
+                    _controllerEmail, 
+                    'Enter your Email', 
+                    false
+                  ),
+                  
                   const SizedBox(height: 20),
                   ManualWidgets.passwordField(
                     
