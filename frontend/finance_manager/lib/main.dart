@@ -8,7 +8,7 @@ import 'screens/LoginScreen.dart';
 import 'screens/SignupScreen.dart';
 import 'screens/HomeScreen.dart';
 import 'screens/SavedSavingsPlanScreen.dart';
-import 'screens/ProfileScreen.dart';
+import 'screens/ForgotPasswordScreen.dart';
 import 'screens/AddExpenseScreen.dart';
 
 void main() async{
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'AI-Powered Finance Manager',
+      title: 'Smart Finance',
       theme: ThemeData(
         primarySwatch: Colors.orange
       ),
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/signup_screen': (context) => SignupScreen(),
         '/login_screen': (context) => LoginScreen(),
+        '/forgot_password_screen' : (context) => ForgotPasswordScreen(),
         '/home_screen': (context) => HomeScreen(),
         '/add_expense': (context) => AddExpenseScreen(),
         '/saved_savings_plans': (context) => SavedSavingsPlansScreen(),

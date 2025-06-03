@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'SignupScreen.dart';
+import 'ForgotPasswordScreen.dart';
+import '../themes/images.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -70,10 +73,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _title() {
+    return Image.asset(Images.wallet, height: 100, width: 100,);
+  }
+
+  Widget _message() {
     return const Text(
-      "Smart Finance",
+      "Welcome back, you have been missed!",
       style: TextStyle(
-        fontSize: 28,
+        fontSize: 16,
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
@@ -165,6 +172,88 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Future <bool> _googleLogin() async {
+
+    final user = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication userAuth = await user!.authentication;
+
+    var credential = GoogleAuthProvider.credential(idToken: userAuth.idToken, accessToken: userAuth.accessToken);
+
+    await FirebaseAuth.instance.signInWithCredential(credential);
+
+    return FirebaseAuth.instance.currentUser != null;
+
+  }
+
+  Widget _googleLoginButton() {
+
+    return InkWell(
+      
+      onTap: ()  async{
+
+        bool isLogged = await _googleLogin();
+
+        if (isLogged) {
+          if (context.mounted) {
+            Navigator.pushReplacementNamed(context, '/home_screen');
+          }
+        }
+
+      },
+      borderRadius: BorderRadius.circular(8.0),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 2)
+            )
+          ]
+        ),
+        child: Image.asset(
+          Images.google,
+          height: 30,
+          width: 30,
+        ),
+      ),
+    );
+  }
+
+    Widget _githubLoginButton() {
+    
+    return InkWell(
+      
+      onTap: ()  async{
+
+      },
+      borderRadius: BorderRadius.circular(8.0),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 2)
+            )
+          ]
+        ),
+        child: Image.asset(
+          Images.github,
+          height: 30,
+          width: 30,
+        ),
+      ),
+    );
+  }
+
   Widget _signUpButton() {
     return TextButton(
       onPressed: () {
@@ -177,6 +266,16 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       child: const Text(
         'Not a User? Register Now!',
+        style: TextStyle(color: Colors.white),
+      ),
+    );
+  }
+
+    Widget _forgotPasswordButton() {
+    return TextButton(
+      onPressed: ()  => Navigator.pushNamed(context, '/forgot_password_screen'),
+      child: const Text(
+        'Forgot Password?',
         style: TextStyle(color: Colors.white),
       ),
     );
@@ -208,15 +307,34 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <Widget>[
                 _title(),
                 const SizedBox(height: 40),
+                _message(),
+                const SizedBox(height: 40),
                 _entryField('Email', _controllerEmail, 'Enter your Email', false),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 _passwordField('Password', _controllerPassword, 'Enter Password'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    _forgotPasswordButton(),
+                  ],
+                ),
                 const SizedBox(height: 10),
                 _errorMessage(),
                 const SizedBox(height: 20),
                 _successMessage(),
                 const SizedBox(height: 10),
                 _loginButton(),
+                const SizedBox(height: 20),
+                Divider(color: Colors.white),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _googleLoginButton(),
+                    const SizedBox(width: 10),
+                    _githubLoginButton(),
+                  ],
+                ),
                 const SizedBox(height: 20),
                 _signUpButton(),
               ],

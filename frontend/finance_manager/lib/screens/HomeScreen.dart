@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
 import 'SavingsPlanScreen.dart';
@@ -140,6 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> logout() async {
+    await GoogleSignIn().signOut();
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacementNamed(context, '/login_screen');
   }
