@@ -1,59 +1,73 @@
-# ========================
-# Flutter-specific ignores
-# ========================
-**/build/
-**/.dart_tool/
-**/.flutter-plugins
-**/.flutter-plugins-dependencies
-**/.packages
-**/pubspec.lock
-**/flutter_*.png
-**/.idea/
-**/*.iml
-**/.vscode/
+# ===================================
+# Flutter Frontend - Ignore Patterns
+# ===================================
 
-# Flutter crash logs
-**/flutter_*.log
+# Build artifacts
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+pubspec.lock
 
-# Android/iOS platform folders (optional)
-**/android/.gradle/
-**/android/.idea/
-**/android/local.properties
-**/android/.settings/
-**/ios/Pods/
-**/ios/Flutter/Generated.xcconfig
+# APK and native binaries
+*.apk
+*.so
 
-# Mac build files
-**/*.xcworkspace
-**/*.xcuserstate
+# IDE settings
+.idea/
+.vscode/
+*.iml
 
-# ========================
-# Flask (Python backend)
-# ========================
-backend/__pycache__/
-backend/*.pyc
-backend/*.pyo
-backend/*.pyd
-backend/.Python
-backend/env/
-backend/venv/
-backend/.venv/
-backend/instance/
-backend/.mypy_cache/
-backend/.pytest_cache/
-backend/.coverage
-backend/coverage.xml
-backend/htmlcov/
+# Crash logs & generated files
+flutter_*.log
+flutter_*.png
+
+# Platform-specific
+android/.gradle/
+android/.idea/
+android/local.properties
+android/.settings/
+ios/Pods/
+ios/Flutter/Generated.xcconfig
+*.xcworkspace
+*.xcuserstate
+
+# ===============================
+# Flask Backend - Python Patterns
+# ===============================
+
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# Flask runtime & testing
+instance/
+.mypy_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# IDE settings
 backend/.vscode/
 backend/.idea/
 
-# Sensitive data
+# Sensitive configuration
 backend/flask_api/firebase_key.json
 .env
 *.env
 
 # ========================
-# General
+# Global OS/System Ignored
 # ========================
 .DS_Store
 Thumbs.db
