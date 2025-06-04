@@ -256,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ManualWidgets.labelButton(
 
                     text: 'Not a User? Register Now!',
-                    onPressed: () => Navigator.pushNamed(context, '/forgot_password_screen'),
+                    onPressed: () => Navigator.pushNamed(context, '/signup_screen'),
 
                   ),
 

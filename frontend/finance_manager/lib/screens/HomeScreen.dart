@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Map<String, double> categoryExpenses = {};
   String? userId;
   String currentMonth = "";
-  User? user;
+  User? user = FirebaseAuth.instance.currentUser;
   DateTime _selectedDate = DateTime.now();
   final TextEditingController _budgetController = TextEditingController();
   final TextEditingController _expenseController = TextEditingController();
@@ -30,13 +30,31 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    user = FirebaseAuth.instance.currentUser;
-    userId = user?.uid;
-    currentMonth = getCurrentMonth();
+    if (_checkIfAccountIsDeleted() == true) {
+      userId = user?.uid;
+      currentMonth = getCurrentMonth();
     if (user != null) {
       fetchNumericUserId(user!.uid);
     }
-    currentMonth = getCurrentMonth();
+      currentMonth = getCurrentMonth();
+    }
+  }
+
+  Future<bool> _checkIfAccountIsDeleted () async {
+    try {
+      IdTokenResult? idTokenResult = await user?.getIdTokenResult(true);
+      if (idTokenResult == null || idTokenResult.token == null) {
+        FirebaseAuth.instance.signOut();
+        Navigator.pushReplacementNamed(context, '/login_screen');
+        return false;
+      } else {
+        return true;
+      }
+    } catch (er) {
+        FirebaseAuth.instance.signOut();
+        Navigator.pushReplacementNamed(context, '/login_screen');
+        return false;
+    }
   }
 
   Future<void> fetchNumericUserId(String firebaseUid) async {

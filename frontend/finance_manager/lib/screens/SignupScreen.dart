@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'LoginScreen.dart';
-import '../themes/images.dart';
+import '../widgets/AnimatedSnackBar.dart';
+import '../widgets/ManualWidgets.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -15,10 +15,8 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
 
-  bool hidePassword = true;
-  bool hideConfirmPassword = true;
-  String? errorMessage = '';
-  String successMessage ='';
+  bool _hidePassword = true;
+  bool _hideConfirmPassword = true;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -63,65 +61,77 @@ class _SignupScreenState extends State<SignupScreen> {
     String password = _controllerPassword.text;
     String confirmPassword = _controllerConfirmPassword.text;
 
-    if (password != confirmPassword) {
-      setState(() {
-        errorMessage = 'Passwords do not match!';
-      });
-      return; // Exit the function if passwords don't match
+    if (name.isEmpty || email.isEmpty || contact.isEmpty || password.isEmpty || confirmPassword .isEmpty) {
+      AnimatedSnackBar.show(context, 'Please fill all the form fields!');
+    }
+
+    else if (password != confirmPassword) {
+      AnimatedSnackBar.show(context, 'Passwords do not match!');
+      return;
     }
 
     try {
-      // Sign up using your custom FirebaseAuthService
+
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email, 
+        email: email,
         password: password,
       );
 
       User? user = userCredential.user;
       if (user != null) {
-        
         name = capitalizeName(name);
-
         user.updateDisplayName(name);
 
-        // Generate a new userId
         int userId = await _getNextUserId();
 
-        // Save user details to Firestore in nested collection
         await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(userId.toString())
-          .set({
-            'id': user.uid,
-            'Email': email,
-            'Name': name,
-            'Contact': contact,
-            'CreatedAt': DateTime.now(),
-            'User Id' : userId.toString(),
+            .collection('Users')
+            .doc(userId.toString())
+            .set({
+          'id': user.uid,
+          'Email': email,
+          'Name': name,
+          'Contact': contact,
+          'CreatedAt': DateTime.now(),
+          'User Id': userId.toString(),
         });
 
-        setState(() {
-            successMessage = 'Account created successfully!';
-        });
+        AnimatedSnackBar.show(context, 'Account created successfully!');
+        await FirebaseAuth.instance.signOut();
 
         await Future.delayed(const Duration(seconds: 2));
-        
-        // Navigate to login screen
+
         if (context.mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
+          Navigator.pushReplacementNamed(context, '/login_screen');
         }
       }
+      
     } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = e.message;
-      });
+
+      String errorMessage = 'An error occurred';
+      final code = e.code.toLowerCase();
+
+      switch(code) {
+
+        case 'invalid-email':
+          errorMessage = 'The email is badly formatted!';
+          break;
+
+        case 'too-many-requests':
+          errorMessage = 'Too many attempts! Try again later.';
+          break;
+
+        default:
+          errorMessage = e.message ?? errorMessage;
+
+      }
+
+      if (context.mounted) {
+        AnimatedSnackBar.show(context, errorMessage);
+      }
+
     } catch (e) {
-        setState(() {
-          errorMessage = 'An unexpected error occurred. Please try again.';
-      });
+      AnimatedSnackBar.show(context, 'An unexpected error occurred. Please try again.');
     }
   }
 
@@ -135,133 +145,20 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  Widget _title() {
-    return Image.asset(
-      Images.wallet, 
-      height: 100, 
-      width: 100
-    );
-  }
-
-  Widget _message() {
-    return const Text(
-      "Register for a better, faster experience!",
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-    );
-  }
-
-  Widget _entryField(String title, TextEditingController controller, String placeholder) {
-    return SizedBox(
-      height: 45,
-      child: TextField(
-        controller: controller,
-        cursorColor: Colors.white,
-        decoration: InputDecoration(
-          labelText: title,
-          labelStyle: const TextStyle(color: Colors.white),
-          hintText: placeholder,
-          hintStyle: const TextStyle(color: Colors.white70),
-          filled: true,
-          fillColor: Colors.white.withOpacity(0.2),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide.none,
-          ),
-        ),
-        style: const TextStyle(color: Colors.white),
-      ),
-    );
-  }
-
-  Widget _passwordField(String title, TextEditingController controller, String placeholder, bool obscureText, VoidCallback toggleVisibility) {
-    return SizedBox(
-      height: 45,
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        cursorColor: Colors.white,
-        decoration: InputDecoration(
-          labelText: title,
-          labelStyle: const TextStyle(color: Colors.white),
-          hintText: placeholder,
-          hintStyle: const TextStyle(color: Colors.white70),
-          filled: true,
-          fillColor: Colors.white.withOpacity(0.2),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide.none,
-          ),
-          suffixIcon: IconButton(
-            onPressed: toggleVisibility,
-            icon: Icon(
-              obscureText ? Icons.visibility_off : Icons.visibility,
-              color: Colors.white,
-            )
-          )
-        ),
-        style: const TextStyle(color: Colors.white),
-      ),
-    );
-  }
-
-  Widget _errorMessage() {
-    return Text(
-      errorMessage == '' ? '' : '$errorMessage',
-      style: const TextStyle(color: Colors.red),
-    );
-  }
-
-  Widget _successMessage() {
-    return Text(
-    successMessage.isEmpty ? '' : successMessage,
-      style: const TextStyle(color: Colors.white, fontSize: 20),
-    );
-  }
-
-  Widget _signUpButton() {
-    return ElevatedButton(
-      onPressed: _signUp,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF90B3E9), // Theme color for button text
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-      ),
-      child: const Text('Register'),
-    );
-  }
-
-  Widget _logInButton() {
-    return TextButton(
-      onPressed: () {
-        Navigator.push(
-          context, 
-          MaterialPageRoute(
-            builder: (context) => const LoginScreen()
-          )
-        );
-      },
-      child: const Text(
-        'Already a User? Sign In!',
-        style: TextStyle(color: Colors.white),
-      ),
-    );
-  }
-  
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+
       body: Container(
+
         height: double.infinity,
         width: double.infinity,
+
         decoration: const BoxDecoration(
+
           gradient: LinearGradient(
+
             begin: Alignment.topRight,
             end: Alignment.bottomCenter,
             colors: [
@@ -270,53 +167,87 @@ class _SignupScreenState extends State<SignupScreen> {
               Color(0xFFB3CFF1), // Lighter shade
             ],
           ),
+
         ),
         child: SafeArea(
+
           child: Center(
+
             child: Padding(
+
               padding: const EdgeInsets.all(20),
+
               child: Column(
+
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  _title(),
-                  _message(),
+                  
+                  ManualWidgets.title(),
+                  ManualWidgets.message("Register for a better, faster experience!"),
                   const SizedBox(height: 20,),
-                  _entryField('Name', _controllerName, 'Enter your name'),
+
+                  ManualWidgets.entryField(
+                    'Name',
+                    _controllerName, 
+                    'Enter your name', 
+                    false
+                  ),
+
                   const SizedBox(height: 20),
-                  _entryField('Email', _controllerEmail, 'Enter your email'),
-                  const SizedBox(height: 20),
-                  _entryField('Contact', _controllerContact, 'Enter your contact'),
-                  const SizedBox(height: 20),
-                  _passwordField(
-                    'Password',
-                    _controllerPassword, 
-                    'Enter Password', 
-                    hidePassword, 
-                    () {
-                      setState(() {
-                        hidePassword = !hidePassword;
-                      });
-                    }
+                  ManualWidgets.entryField(
+                    'Email',
+                    _controllerEmail, 
+                    'Enter your Email', 
+                    false
                   ),
                   const SizedBox(height: 20),
-                  _passwordField(
-                    'Confirm Password',
-                    _controllerConfirmPassword, 
-                    'Please confirm Password', 
-                    hideConfirmPassword, () {
-                      setState(() {
-                        hideConfirmPassword = !hideConfirmPassword;
-                      });
-                    }
+                  ManualWidgets.entryField(
+                    'Contact',
+                    _controllerContact, 
+                    'Enter your contact number', 
+                    false
                   ),
-                  const SizedBox(height: 4),
-                  _errorMessage(),
+                  const SizedBox(height: 20),
+                  ManualWidgets.passwordField(
+                    
+                    title: 'Password',
+                    controller: _controllerPassword,
+                    placeholder: 'Enter your password',
+                    hidePassword: _hidePassword,
+                    onToggleVisibility: () {
+                      
+                      setState(() {
+                        _hidePassword = !_hidePassword;
+                      });
+
+                    },
+
+                  ),
+                  const SizedBox(height: 20),
+                  ManualWidgets.passwordField(
+                    
+                    title: 'Password',
+                    controller: _controllerConfirmPassword,
+                    placeholder: 'Enter your password',
+                    hidePassword: _hideConfirmPassword,
+                    onToggleVisibility: () {
+                      
+                      setState(() {
+                        _hideConfirmPassword = !_hideConfirmPassword;
+                      });
+
+                    },
+
+                  ),
+                  const SizedBox(height: 15),
+                  ManualWidgets.loginRegisterButton('Register', _signUp),
                   const SizedBox(height: 10),
-                  _successMessage(),
-                  const SizedBox(height: 10),
-                  _signUpButton(),
-                  const SizedBox(height: 10),
-                  _logInButton(),
+                  ManualWidgets.labelButton(
+
+                    text: 'Already a User? Sign In!',
+                    onPressed: () => Navigator.pushNamed(context, '/login_screen'),
+
+                  ),
                 ], 
               ),
             ),
