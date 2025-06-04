@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 
 import 'screens/LoginScreen.dart';
 import 'screens/SignupScreen.dart';
+import 'screens/VerifyEmailScreen.dart';
 import 'screens/HomeScreen.dart';
 import 'screens/SavedSavingsPlanScreen.dart';
 import 'screens/ForgotPasswordScreen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
           : const HomeScreen(),
       routes: {
         '/signup_screen': (context) => SignupScreen(),
+        '/verify_email_screen': (context) => VerifyEmailScreen(),
         '/login_screen': (context) => LoginScreen(),
         '/forgot_password_screen' : (context) => ForgotPasswordScreen(),
         '/home_screen': (context) => HomeScreen(),

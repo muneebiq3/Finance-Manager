@@ -72,6 +72,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
     try {
 
+      AnimatedSnackBar.show(context, 'Please verify your email to continue!');
+
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -96,13 +98,10 @@ class _SignupScreenState extends State<SignupScreen> {
           'User Id': userId.toString(),
         });
 
-        AnimatedSnackBar.show(context, 'Account created successfully!');
-        await FirebaseAuth.instance.signOut();
-
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 1));
 
         if (context.mounted) {
-          Navigator.pushReplacementNamed(context, '/login_screen');
+          Navigator.pushReplacementNamed(context, '/verify_email_screen');
         }
       }
       
