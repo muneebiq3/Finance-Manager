@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../widgets/AnimatedSnackBar.dart';
 import '../widgets/ManualWidgets.dart';
@@ -37,7 +36,7 @@ class _SignupScreenState extends State<SignupScreen> {
       }
     }
     return words.join(' '); // Join the words back together
-    
+
   }
 
   void _signUp() async {
@@ -91,15 +90,23 @@ class _SignupScreenState extends State<SignupScreen> {
     final code = e.code.toLowerCase();
 
     switch (code) {
+
       case 'email-already-in-use':
         errorMessage = 'This email is already in use.';
         break;
+
       case 'invalid-email':
         errorMessage = 'The email is badly formatted.';
         break;
+
       case 'too-many-requests':
         errorMessage = 'Too many attempts! Try again later.';
         break;
+
+      case 'network-request-failed':
+          errorMessage = 'No internet connection. Please check your connection and try again!';
+          break;
+          
       default:
         errorMessage = e.message ?? errorMessage;
     }
@@ -226,12 +233,21 @@ class _SignupScreenState extends State<SignupScreen> {
                     onPressed: () => Navigator.pushNamed(context, '/login_screen'),
 
                   ),
+
                 ], 
+
               ),
+
             ),
+
           ),
+
         ),
+
       ),
+
     );
+
   }
+
 }

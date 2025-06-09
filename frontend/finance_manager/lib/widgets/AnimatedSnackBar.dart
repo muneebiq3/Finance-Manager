@@ -72,43 +72,71 @@ class _AnimatedSnackBarState extends State<AnimatedSnackBar>
 
   @override
   Widget build(BuildContext context) {
+
     return Positioned(
+
       top: 50,
       left: 0,
       right: 0,
+
       child: SlideTransition(
+
         position: _slideAnimation,
+
         child: FadeTransition(
+
           opacity: _fadeAnimation,
           child: Material(
+
             color: Colors.transparent,
+
             child: Center(
+
               child: Container(
+
                 padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+
                 decoration: BoxDecoration(
-                  color: Colors.white,
+
+                  color: Color.fromARGB(255, 248, 247, 247),
                   borderRadius: BorderRadius.circular(12),
+
                   boxShadow: const [
+
                     BoxShadow(
                       color: Colors.white,
                       blurRadius: 10,
                       offset: Offset(0, 4),
                     ),
+
                   ],
+
                 ),
+
                 child: Text(
+
                   widget.message,
+
                   style: const TextStyle(
+
                     color: Color(0xFF90B3E9),
-                    fontSize: 16,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
+
                 ),
               ),
+              
             ),
+
           ),
+
         ),
+        
       ),
+
     );
+
   }
+  
 }

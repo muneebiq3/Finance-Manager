@@ -35,15 +35,37 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       AnimatedSnackBar.show(context, 'If this email is registered, a reset link has been sent to: $email');
 
     } on FirebaseAuthException catch (e) {
+
       String errorMessage = 'An error occurred';
-      if (e.code == 'invalid-email') {
-        errorMessage = 'The email address is badly formatted!';
-      } else if (e.code == 'user-not-found') {
-        errorMessage = 'No user found with this email.';
-      } else {
-        errorMessage = e.message ?? errorMessage;
+      final code = e.code.toLowerCase();
+
+      switch (code) {
+
+        case 'invalid-email':
+          errorMessage = 'The email is badly formatted!';
+          break;
+
+        case 'user-not-found':
+          errorMessage = 'No user found for that email!';
+          break;
+
+        case 'network-request-failed':
+          errorMessage = 'No internet connection. Please check your connection and try again!';
+          break;
+
+        case 'too-many-requests':
+          errorMessage = 'Too many attempts! Try again later.';
+          break;
+
+        default:
+          errorMessage = e.message ?? errorMessage;
+
       }
-      AnimatedSnackBar.show(context, errorMessage);
+
+      if (context.mounted) {
+        AnimatedSnackBar.show(context, errorMessage);
+      }
+      
     } 
     finally {
       setState(() {

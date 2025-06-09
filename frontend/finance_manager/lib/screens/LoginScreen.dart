@@ -100,6 +100,10 @@ class _LoginScreenState extends State<LoginScreen> {
           errorMessage = 'This user has been disabled!';
           break;
 
+        case 'network-request-failed':
+          errorMessage = 'No internet connection. Please check your connection and try again!';
+          break;
+
         case 'too-many-requests':
           errorMessage = 'Too many attempts! Try again later.';
           break;
