@@ -64,11 +64,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+
       body: Container(
+
         height: double.infinity,
         width: double.infinity,
+
         decoration: const BoxDecoration(
+
           gradient: LinearGradient(
+
             begin: Alignment.topRight,
             end: Alignment.bottomCenter,
             colors: [
@@ -76,29 +81,43 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Color(0xFF90B3E9), // Primary theme color
               Color(0xFFB3CFF1), // Lighter shade
             ],
+
           )
         ),
+
         child: SafeArea(
+
           child: Stack(
+
             children: [
+
               Positioned(
+
                 top: 10,
                 left: 10,
+
                 child: IconButton(
+
                   onPressed: () => Navigator.pop(context), 
                   icon: Icon(
                     Icons.arrow_back, 
                     color: Colors.white,
                     size: 25,
                   )
+
                 )
               ),
               Center(
+
                 child: Padding(
+
                   padding: const EdgeInsets.symmetric(horizontal: 20),
+
                   child: Column(
+
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+
                       ManualWidgets.title(),
                       const SizedBox(height: 40),
                       ManualWidgets.message("Smart Finance - Forgot Password"),
@@ -117,14 +136,25 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         isLoading: _isLoading,
                         onPressed: () => _resetPassword(context),
                       )
+
                     ],
+
                   ),
+
                 ),
+
               )
+
             ],
+
           )
+
         ),
+
       ),
+
     );
+
   }
+  
 }

@@ -27,6 +27,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _controllerConfirmPassword = TextEditingController();
 
   String capitalizeName(String name) {
+
     if (name.isEmpty) return '';
     
     List<String> words = name.split(' '); // Split by space to handle first and last name
@@ -36,103 +37,81 @@ class _SignupScreenState extends State<SignupScreen> {
       }
     }
     return words.join(' '); // Join the words back together
-  }
-
-  Future<int> _getNextUserId() async {
-    DocumentReference counterDoc = FirebaseFirestore.instance.collection('MetaData').doc('UserCounter');
-
-    return FirebaseFirestore.instance.runTransaction((transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(counterDoc);
-
-      int currentCount = snapshot.exists ? (snapshot.get('counter') as int) : 0;
-      int nextCount = currentCount + 1;
-
-      // Update the counter for the next user
-      transaction.set(counterDoc, {'counter': nextCount}, SetOptions(merge: true));
-      return nextCount;
-    });
+    
   }
 
   void _signUp() async {
 
-    String name = _controllerName.text;
-    String email = _controllerEmail.text;
-    String contact = _controllerContact.text;
-    String password = _controllerPassword.text;
-    String confirmPassword = _controllerConfirmPassword.text;
+  String name = _controllerName.text;
+  String email = _controllerEmail.text;
+  String contact = _controllerContact.text;
+  String password = _controllerPassword.text;
+  String confirmPassword = _controllerConfirmPassword.text;
 
-    if (name.isEmpty || email.isEmpty || contact.isEmpty || password.isEmpty || confirmPassword .isEmpty) {
-      AnimatedSnackBar.show(context, 'Please fill all the form fields!');
-    }
+  if (name.isEmpty || email.isEmpty || contact.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    AnimatedSnackBar.show(context, 'Please fill all the form fields!');
+    return;
+  }
 
-    else if (password != confirmPassword) {
-      AnimatedSnackBar.show(context, 'Passwords do not match!');
-      return;
-    }
+  if (password != confirmPassword) {
+    AnimatedSnackBar.show(context, 'Passwords do not match!');
+    return;
+  }
 
-    try {
+  try {
+    // Attempt to create the user
+    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    User? user = userCredential.user;
+    if (user != null) {
+      // Send verification email
+      await user.sendEmailVerification();
 
       AnimatedSnackBar.show(context, 'Please verify your email to continue!');
 
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      User? user = userCredential.user;
-      if (user != null) {
-        name = capitalizeName(name);
-        user.updateDisplayName(name);
-
-        int userId = await _getNextUserId();
-
-        await FirebaseFirestore.instance
-            .collection('Users')
-            .doc(userId.toString())
-            .set({
-          'id': user.uid,
-          'Email': email,
-          'Name': name,
-          'Contact': contact,
-          'CreatedAt': DateTime.now(),
-          'User Id': userId.toString(),
-        });
-
-        await Future.delayed(const Duration(seconds: 1));
-
-        if (context.mounted) {
-          Navigator.pushReplacementNamed(context, '/verify_email_screen');
-        }
-      }
-      
-    } on FirebaseAuthException catch (e) {
-
-      String errorMessage = 'An error occurred';
-      final code = e.code.toLowerCase();
-
-      switch(code) {
-
-        case 'invalid-email':
-          errorMessage = 'The email is badly formatted!';
-          break;
-
-        case 'too-many-requests':
-          errorMessage = 'Too many attempts! Try again later.';
-          break;
-
-        default:
-          errorMessage = e.message ?? errorMessage;
-
-      }
-
+      // Navigate to verification screen with arguments
       if (context.mounted) {
-        AnimatedSnackBar.show(context, errorMessage);
+        Navigator.pushReplacementNamed(
+          context,
+          '/verify_email_screen',
+          arguments: {
+            'name': capitalizeName(name),
+            'contact': contact,
+            'email': email,
+          },
+        );
       }
-
-    } catch (e) {
-      AnimatedSnackBar.show(context, 'An unexpected error occurred. Please try again.');
     }
+
+  } on FirebaseAuthException catch (e) {
+    String errorMessage = 'An error occurred';
+    final code = e.code.toLowerCase();
+
+    switch (code) {
+      case 'email-already-in-use':
+        errorMessage = 'This email is already in use.';
+        break;
+      case 'invalid-email':
+        errorMessage = 'The email is badly formatted.';
+        break;
+      case 'too-many-requests':
+        errorMessage = 'Too many attempts! Try again later.';
+        break;
+      default:
+        errorMessage = e.message ?? errorMessage;
+    }
+
+    if (context.mounted) {
+      AnimatedSnackBar.show(context, errorMessage);
+    }
+  } catch (e) {
+    AnimatedSnackBar.show(context, 'An unexpected error occurred. Please try again.');
   }
+}
+
 
   @override
   void dispose() {
