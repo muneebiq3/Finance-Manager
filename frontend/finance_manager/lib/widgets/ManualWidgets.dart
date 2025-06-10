@@ -224,6 +224,75 @@ class ManualWidgets extends StatefulWidget {
     );
   }
 
+  static Widget homeScreenField(String title, TextEditingController controller) {
+
+    return TextField(
+
+      controller: controller,
+      keyboardType: TextInputType.number,
+      cursorColor: Colors.white,
+
+      decoration: InputDecoration(
+
+        labelText: title,
+        labelStyle: const TextStyle(color: Colors.white),
+        hintStyle: const TextStyle(color: Colors.white70),
+
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(
+            color: Colors.white
+          )
+        ),
+
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.white
+          )
+                              
+        ),
+
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.white
+          )
+        )
+        
+      ),
+
+      style: const TextStyle(color: Colors.white),
+    );
+
+  }
+
+  static Widget homeScreenButton ({
+
+    required String text,
+    required double width,
+    required VoidCallback onPressed,
+
+  }) {
+
+    return SizedBox(
+
+      width: width,
+      child: ElevatedButton(
+
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+
+          backgroundColor: Color(0xFF266DD1),
+
+        ),
+
+        child: Text(
+          text,
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
 }
 
 class _ManualWidgetsState extends State<ManualWidgets> {
