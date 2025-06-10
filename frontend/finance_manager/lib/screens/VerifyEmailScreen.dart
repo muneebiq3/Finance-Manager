@@ -168,7 +168,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 
                     child: isEmailVerified
                 
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator(color: Colors.white,)
                     : Column(
                 
                       mainAxisSize: MainAxisSize.min,

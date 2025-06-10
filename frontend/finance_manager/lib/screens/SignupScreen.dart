@@ -158,26 +158,26 @@ class _SignupScreenState extends State<SignupScreen> {
 
           child: Center(
 
-            child: Padding(
+            child: SingleChildScrollView( 
 
               padding: const EdgeInsets.all(20),
-
+            
               child: Column(
-
+              
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   
                   ManualWidgets.title(),
                   ManualWidgets.message("Register for a better, faster experience!"),
                   const SizedBox(height: 20,),
-
+              
                   ManualWidgets.entryField(
                     'Name',
                     _controllerName, 
                     'Enter your name', 
                     false
                   ),
-
+              
                   const SizedBox(height: 20),
                   ManualWidgets.entryField(
                     'Email',
@@ -204,9 +204,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       setState(() {
                         _hidePassword = !_hidePassword;
                       });
-
+              
                     },
-
+              
                   ),
                   const SizedBox(height: 20),
                   ManualWidgets.passwordField(
@@ -220,26 +220,25 @@ class _SignupScreenState extends State<SignupScreen> {
                       setState(() {
                         _hideConfirmPassword = !_hideConfirmPassword;
                       });
-
+              
                     },
-
+              
                   ),
                   const SizedBox(height: 15),
                   ManualWidgets.loginRegisterButton('Register', _signUp),
                   const SizedBox(height: 10),
                   ManualWidgets.labelButton(
-
+              
                     text: 'Already a User? Sign In!',
                     onPressed: () => Navigator.pushNamed(context, '/login_screen'),
-
+              
                   ),
-
+              
                 ], 
-
+              
               ),
-
+            
             ),
-
           ),
 
         ),

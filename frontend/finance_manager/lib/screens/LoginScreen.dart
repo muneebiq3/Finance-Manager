@@ -174,105 +174,92 @@ class _LoginScreenState extends State<LoginScreen> {
 
           child: Center(
 
-            child: Padding(
-
+            child: SingleChildScrollView(
+            
               padding: const EdgeInsets.all(20),
-
+            
               child: Column(
-
-                mainAxisSize: MainAxisSize.min,
+                        
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-
+                        
                   ManualWidgets.title(),
                   ManualWidgets.message("Welcome back, you have been missed!"),
                   const SizedBox(height: 20),
-
+                        
                   ManualWidgets.entryField(
                     'Email',
-                    _controllerEmail, 
-                    'Enter your Email', 
-                    false
+                    _controllerEmail,
+                    'Enter your Email',
+                    false,
                   ),
-                  
+                        
                   const SizedBox(height: 20),
                   ManualWidgets.passwordField(
-                    
+                        
                     title: 'Password',
                     controller: _controllerPassword,
                     placeholder: 'Enter your password',
                     hidePassword: _hidePassword,
                     onToggleVisibility: () {
-                      
                       setState(() {
                         _hidePassword = !_hidePassword;
                       });
-
                     },
-
                   ),
-
+                        
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-
                       ManualWidgets.labelButton(
                         text: 'Forgot Password?',
                         onPressed: () {
                           Navigator.pushNamed(context, '/forgot_password_screen');
-                        }
-
-                      )
-
+                        },
+                      ),
                     ],
                   ),
-
+                        
                   ManualWidgets.loginRegisterButton('Login', _signIn),
                   const SizedBox(height: 20),
                   Divider(color: Colors.white),
                   const SizedBox(height: 20),
-
+                  
                   Row(
-
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
                       ManualWidgets.associatedLoginButton(
                         onTap: () async {
                           bool isLogged = await _googleLogin();
-
                           if (isLogged && context.mounted) {
                             Navigator.pushReplacementNamed(context, '/home_screen');
                           }
                         },
-                        imageAsset: Images.google, // your path from `images.dart`
+                        imageAsset: Images.google,
                       ),
-
                       const SizedBox(width: 10),
                       ManualWidgets.associatedLoginButton(
-                        onTap: ()  {},
-                        imageAsset: Images.github, // your path from `images.dart`
+                        onTap: () {},
+                        imageAsset: Images.github,
                       ),
-
                     ],
-
                   ),
+                        
                   const SizedBox(height: 20),
                   ManualWidgets.labelButton(
-
                     text: 'Not a User? Register Now!',
-                    onPressed: () => Navigator.pushNamed(context, '/signup_screen'),
-
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/signup_screen'),
                   ),
-
+                        
                 ],
-
+                        
               ),
-
+            
             ),
-
           ),
 
-        ),
+        )
 
       ),
 
