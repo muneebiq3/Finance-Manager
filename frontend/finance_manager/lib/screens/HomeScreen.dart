@@ -19,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double totalIncome = 0;
   double spentAmount = 0;
-  int random = 0;
   Map<String, double> categoryExpenses = {};
   String? userId;
   String currentMonth = "";

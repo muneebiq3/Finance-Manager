@@ -24,7 +24,7 @@ class ManualWidgets extends StatefulWidget {
       style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        // color: Colors.white,
       ),
       
     );
@@ -36,16 +36,16 @@ class ManualWidgets extends StatefulWidget {
 
       controller: controller,
       obscureText: hide,
-      cursorColor: Colors.white,
+      // cursorColor: Colors.white,
 
       decoration: InputDecoration(
 
         labelText: title,
-        labelStyle: const TextStyle(color: Colors.white),
+        // labelStyle: const TextStyle(color: Colors.white),
         hintText: placeholder,
-        hintStyle: const TextStyle(color: Colors.white70),
+        // hintStyle: const TextStyle(color: Colors.white70),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.2),
+        // fillColor: Colors.white.withOpacity(0.2),
 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -54,7 +54,7 @@ class ManualWidgets extends StatefulWidget {
         
       ),
 
-      style: const TextStyle(color: Colors.white),
+      // style: const TextStyle(color: Colors.white),
     );
 
   }
@@ -73,16 +73,16 @@ class ManualWidgets extends StatefulWidget {
 
       controller: controller,
       obscureText: hidePassword,
-      cursorColor: Colors.white,
+      // cursorColor: Colors.white,
 
       decoration: InputDecoration (
 
         labelText: title,
-        labelStyle: const TextStyle(color: Colors.white),
+        // labelStyle: const TextStyle(color: Colors.white),
         hintText: placeholder,
-        hintStyle: const TextStyle(color: Colors.white70),
+        // hintStyle: const TextStyle(color: Colors.white70),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.2),
+        // fillColor: Colors.white.withOpacity(0.2),
 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -94,14 +94,14 @@ class ManualWidgets extends StatefulWidget {
           onPressed: onToggleVisibility,
           icon: Icon(
             hidePassword ? Icons.visibility_off : Icons.visibility,
-            color: Colors.white,
+            // color: Colors.white,
           ),
 
         ),
 
       ),
 
-      style: const TextStyle(color: Colors.white),
+      // style: const TextStyle(color: Colors.white),
 
     );
 
@@ -120,7 +120,7 @@ class ManualWidgets extends StatefulWidget {
 
       child: Text(
         text,
-        style: TextStyle(color: Colors.white),
+        // style: TextStyle(color: Colors.white),
       ),
     );
   }
@@ -133,8 +133,8 @@ class ManualWidgets extends StatefulWidget {
 
       style: ElevatedButton.styleFrom(
 
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF90B3E9), // Theme color for button text
+        // backgroundColor: Colors.white,
+        // foregroundColor: const Color(0xFF90B3E9), // Theme color for button text
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
 
         shape: RoundedRectangleBorder(
@@ -165,12 +165,12 @@ class ManualWidgets extends StatefulWidget {
 
         decoration: BoxDecoration(
 
-          color: Colors.white,
+          // color: Colors.white,
           borderRadius: BorderRadius.circular(8.0),
 
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              // color: Colors.black.withOpacity(0.1),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -209,8 +209,8 @@ class ManualWidgets extends StatefulWidget {
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
 
-          backgroundColor: Colors.white,
-          foregroundColor: const Color(0xFF90B3E9), // Theme color for button text
+          // backgroundColor: Colors.white,
+          // foregroundColor: const Color(0xFF90B3E9), // Theme color for button text
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
 
           shape: RoundedRectangleBorder(
@@ -230,37 +230,37 @@ class ManualWidgets extends StatefulWidget {
 
       controller: controller,
       keyboardType: TextInputType.number,
-      cursorColor: Colors.white,
+      // cursorColor: Colors.white,
 
       decoration: InputDecoration(
 
         labelText: title,
-        labelStyle: const TextStyle(color: Colors.white),
-        hintStyle: const TextStyle(color: Colors.white70),
+        // labelStyle: const TextStyle(color: Colors.white),
+        // hintStyle: const TextStyle(color: Colors.white70),
 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: BorderSide(
-            color: Colors.white
+            // color: Colors.white
           )
         ),
 
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.white
+            // color: Colors.white
           )
                               
         ),
 
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.white
+            // color: Colors.white
           )
         )
         
       ),
 
-      style: const TextStyle(color: Colors.white),
+      // style: const TextStyle(color: Colors.white),
     );
 
   }
@@ -281,13 +281,13 @@ class ManualWidgets extends StatefulWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
 
-          backgroundColor: Color(0xFF266DD1),
+          // backgroundColor: Color(0xFF266DD1),
 
         ),
 
         child: Text(
           text,
-          style: TextStyle(color: Colors.white),
+          // style: TextStyle(color: Colors.white),
         ),
       ),
     );

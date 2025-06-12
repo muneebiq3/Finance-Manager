@@ -150,117 +150,129 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
 
-      body: Container(
-
-        height: double.infinity,
-        width: double.infinity,
-
-        decoration: const BoxDecoration(
-
-          gradient: LinearGradient(
-
-            begin: Alignment.topRight,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF266DD1), // Darker shade
-              Color(0xFF90B3E9), // Primary theme color
-              Color(0xFFB3CFF1), // Lighter shade
-            ],
-          ),
-
-        ),
-
-        child: SafeArea(
-
-          child: Center(
-
-            child: SingleChildScrollView(
+      body: Builder(
+        builder: (context) {
+          
+          final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+          return Container(
             
-              padding: const EdgeInsets.all(20),
-            
-              child: Column(
-                        
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                        
-                  ManualWidgets.title(),
-                  ManualWidgets.message("Welcome back, you have been missed!"),
-                  const SizedBox(height: 20),
-                        
-                  ManualWidgets.entryField(
-                    'Email',
-                    _controllerEmail,
-                    'Enter your Email',
-                    false,
-                  ),
-                        
-                  const SizedBox(height: 20),
-                  ManualWidgets.passwordField(
-                        
-                    title: 'Password',
-                    controller: _controllerPassword,
-                    placeholder: 'Enter your password',
-                    hidePassword: _hidePassword,
-                    onToggleVisibility: () {
-                      setState(() {
-                        _hidePassword = !_hidePassword;
-                      });
-                    },
-                  ),
-                        
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ManualWidgets.labelButton(
-                        text: 'Forgot Password?',
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/forgot_password_screen');
-                        },
-                      ),
-                    ],
-                  ),
-                        
-                  ManualWidgets.loginRegisterButton('Login', _signIn),
-                  const SizedBox(height: 20),
-                  Divider(color: Colors.white),
-                  const SizedBox(height: 20),
-                  
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ManualWidgets.associatedLoginButton(
-                        onTap: () async {
-                          bool isLogged = await _googleLogin();
-                          if (isLogged && context.mounted) {
-                            Navigator.pushReplacementNamed(context, '/home_screen');
-                          }
-                        },
-                        imageAsset: Images.google,
-                      ),
-                      const SizedBox(width: 10),
-                      ManualWidgets.associatedLoginButton(
-                        onTap: () {},
-                        imageAsset: Images.github,
-                      ),
-                    ],
-                  ),
-                        
-                  const SizedBox(height: 20),
-                  ManualWidgets.labelButton(
-                    text: 'Not a User? Register Now!',
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/signup_screen'),
-                  ),
-                        
+            height: double.infinity,
+            width: double.infinity,
+          
+            decoration: BoxDecoration(
+          
+              gradient: LinearGradient(
+          
+                begin: Alignment.topRight,
+                end: Alignment.bottomCenter,
+                colors: isDarkMode
+              ? const [
+                  Color(0xFF121212), // Dark background
+                  Color(0xFF1E1E1E), // Slightly lighter
+                  Color(0xFF2C2C2C), // Mid-gray
+                ]
+              : const [
+                  Color(0xFF266DD1), // Original light gradient
+                  Color(0xFF90B3E9),
+                  Color(0xFFB3CFF1),
                 ],
-                        
               ),
-            
+          
             ),
-          ),
-
-        )
-
+          
+            child: SafeArea(
+          
+              child: Center(
+          
+                child: SingleChildScrollView(
+                
+                  padding: const EdgeInsets.all(20),
+                
+                  child: Column(
+                            
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                            
+                      ManualWidgets.title(),
+                      ManualWidgets.message("Welcome back, you have been missed!"),
+                      const SizedBox(height: 20),
+                            
+                      ManualWidgets.entryField(
+                        'Email',
+                        _controllerEmail,
+                        'Enter your Email',
+                        false,
+                      ),
+                            
+                      const SizedBox(height: 20),
+                      ManualWidgets.passwordField(
+                            
+                        title: 'Password',
+                        controller: _controllerPassword,
+                        placeholder: 'Enter your password',
+                        hidePassword: _hidePassword,
+                        onToggleVisibility: () {
+                          setState(() {
+                            _hidePassword = !_hidePassword;
+                          });
+                        },
+                      ),
+                            
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ManualWidgets.labelButton(
+                            text: 'Forgot Password?',
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/forgot_password_screen');
+                            },
+                          ),
+                        ],
+                      ),
+                            
+                      ManualWidgets.loginRegisterButton('Login', _signIn),
+                      const SizedBox(height: 20),
+                      // Divider(color: Colors.white),
+                      const SizedBox(height: 20),
+                      
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ManualWidgets.associatedLoginButton(
+                            onTap: () async {
+                              bool isLogged = await _googleLogin();
+                              if (isLogged && context.mounted) {
+                                Navigator.pushReplacementNamed(context, '/home_screen');
+                              }
+                            },
+                            imageAsset: Images.google,
+                          ),
+                          const SizedBox(width: 10),
+                          ManualWidgets.associatedLoginButton(
+                            onTap: () {},
+                            imageAsset: Images.github,
+                          ),
+                        ],
+                      ),
+                            
+                      const SizedBox(height: 20),
+                      ManualWidgets.labelButton(
+                        text: 'Not a User? Register Now!',
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/signup_screen'),
+                      ),
+                            
+                    ],
+                            
+                  ),
+                
+                ),
+              ),
+          
+            )
+          
+          );
+        }
       ),
 
     );

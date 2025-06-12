@@ -25,12 +25,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
+
       debugShowCheckedModeBanner: false,
       title: 'Smart Finance',
       theme: ThemeData(
-        primarySwatch: Colors.orange
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFF266DD1),
+          secondary: Colors.white,
+        ),
+        useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Color(0xFF266DD1), 
+          brightness: Brightness.dark
+        )
+      ),
+      themeMode: ThemeMode.system,
+
       home: FirebaseAuth.instance.currentUser == null
           ? const LoginScreen()
           : const HomeScreen(),
